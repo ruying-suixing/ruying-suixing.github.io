@@ -39,10 +39,10 @@ const WEBSITE_SORTS: WebsiteSort[] = [
     title: "友情链接",
     sites: [
       {
-        title: "EsunR Blog",
-        description: "EsunR 的博客",
-        url: "https://www.esunr.xyz",
-        icon: "https://esunr-image-bed.oss-cn-beijing.aliyuncs.com/logo.jpg",
+        title: "example",
+        description: "",
+        url: "https://example.com",
+        icon: "https://example.com/favicon.ico",
       },
     ],
   },
@@ -55,35 +55,34 @@ const GLOBAL_CONFIG = {
   /**
    * 博客名称
    */
-  BLOG_NAME: "EsunR-Blog",
+  BLOG_NAME: "如形の小站",
   /**
    * 个人博客链接
    */
-  BLOG_URL: "https://blog.esunr.xyz",
+  BLOG_URL: "https://rusin.cn.mt",
   /**
    * 指定中心 LOGO 图片地址
    */
-  LOGO_URL: null,
+  LOGO_URL: "https://rusin.cn.mt/favicon.ico",
   /**
    * 个人 Github 链接
    */
-  GITHUB_URL: "https://github.com/EsunR",
+  GITHUB_URL: "https://github.com/ruying-suixing",
   /**
    * 背景图片地址
    */
-  BACKGROUND_IMG_URL: "https://api.dujin.org/bing/1920.php",
+  BACKGROUND_IMG_URL: "https://dash.lovestoblog.com/images/background2.jpg",
   /**
    * ICP 备案号，留空不显示
    */
-  ICP: "京ICP证000001号",
-  ICP_URL: "https://beian.miit.gov.cn/",
-  FOOTER_INFO: true,
+  ICP: "",
+  ICP_URL: "",
+  FOOTER_INFO: false,
   /**
    * 网站欢迎标语
    */
   SLOGANS: [
     "欢迎拜访",
-    "歡迎拜訪",
     "Welcome, my friend!",
     "訪問へようこそ",
     "嗨，别来无恙",
@@ -104,8 +103,8 @@ const GLOBAL_CONFIG = {
    * 网站 Title Keywords Description 的配置，用于 SEO
    */
   TKD: {
-    title: "My Blog Index",
-    keywords: "Blog, Index, Index Page",
+    title: "如形の项目",
+    keywords: "博客, 个人博客, 如形の博客，如形の项目",
     description: "This is my personal blog index page.",
   },
 };
