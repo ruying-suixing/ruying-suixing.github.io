@@ -4,21 +4,41 @@ const WEBSITE_SORTS: WebsiteSort[] = [
     title: "示例分类1",
     sites: [
       {
-        title: "主标题",
-        url: "http://www.your-web-page.com/",
-        icon: "",
+        title: "如形の主页",
+        description: "如形的个人主页，提供美观的网页，如博客、文档和各种工具。",
+        url: "http://www.rusin7.com/",
+        icon: "/favicon.ico",
         color: "#0171CD",
       },
       {
-        title: "主标题",
-        description: "网站描述",
-        url: "http://www.your-web-page.com/",
+        title: "❄️智能 AI",
+        description:
+          "❄️ 你好，我是雪域智狐，你的专业 AI 助手。深度思考，简洁回答。有什么可以帮你的？",
+        url: "/ai.html",
         icon: "",
       },
       {
-        title: "主标题",
-        description: "网站描述",
-        url: "http://www.your-web-page.com/",
+        title: "毒鸡汤",
+        description: "",
+        url: "/dujitang.html",
+        icon: "",
+      },
+      {
+        title: "追击",
+        description: "弱智的鼠标小游戏",
+        url: "/pages/click",
+        icon: "",
+      },
+      {
+        title: "代码下载",
+        description: "下载我的 C++ 模板代码",
+        url: "/pages/code",
+        icon: "",
+      },
+      {
+        title: "收藏夹",
+        description: "",
+        url: "/pages/web",
         icon: "",
       },
     ],
@@ -59,11 +79,11 @@ const GLOBAL_CONFIG = {
   /**
    * 个人博客链接
    */
-  BLOG_URL: "https://rusin.cn.mt",
+  BLOG_URL: "https://rusin7.com",
   /**
    * 指定中心 LOGO 图片地址
    */
-  LOGO_URL: "https://rusin.cn.mt/favicon.ico",
+  LOGO_URL: "/favicon.ico",
   /**
    * 个人 Github 链接
    */
@@ -71,12 +91,12 @@ const GLOBAL_CONFIG = {
   /**
    * 背景图片地址
    */
-  BACKGROUND_IMG_URL: "https://dash.lovestoblog.com/images/background2.jpg",
+  BACKGROUND_IMG_URL: "https://tab.rusin7.com/images/background2.jpg",
   /**
    * ICP 备案号，留空不显示
    */
-  ICP: "",
-  ICP_URL: "",
+  ICP: "萌 ICP 备 20268884 号",
+  ICP_URL: "https://icp.gov.moe/?keyword=20268884",
   FOOTER_INFO: false,
   /**
    * 网站欢迎标语
