@@ -18,6 +18,7 @@
     "prepare": "husky install",
     "deploy": "gh-pages -d dist"
   },
+  
   "license": "MIT",
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
