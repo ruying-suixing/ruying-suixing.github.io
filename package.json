@@ -16,12 +16,13 @@
     "lint": "eslint --ext .js,.vue,.ts --ignore-path .gitignore --fix src",
     "format": "prettier .  --write",
     "prepare": "husky install",
-    "cz": "cz"
+    "deploy": "gh-pages -d dist"
   },
   "license": "MIT",
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
     "@unhead/vue": "^1.2.2",
+    "gh-pages": "^6.3.0",
     "vue": "^3.3.4"
   },
   "devDependencies": {
