@@ -1,19 +1,23 @@
+import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import path from "path";
-import { defineConfig } from "vite";
 import viteCompression from "vite-plugin-compression";
 import eslintPlugin from "vite-plugin-eslint";
 
-// https://vitejs.dev/config/
-export default () => {
-  return defineConfig({
-    plugins: [vue(), vueJsx(), eslintPlugin(), viteCompression()],
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src/"),
-      },
+export default defineConfig({
+  // GitHub Pages 必须配置相对路径，防止资源404
+  base: "./",
+  plugins: [vue(), vueJsx(), eslintPlugin(), viteCompression()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src/"),
     },
-    envDir: "./",
-  });
-};
+  },
+  envDir: "./",
+  build: {
+    // 可选：静态打包优化
+    outDir: "dist",
+    emptyOutDir: true
+  }
+});

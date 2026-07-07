@@ -11,14 +11,13 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite-ssg build",
+    "build": "vite build",
     "serve": "vite preview",
     "lint": "eslint --ext .js,.vue,.ts --ignore-path .gitignore --fix src",
     "format": "prettier .  --write",
     "prepare": "husky install",
     "deploy": "gh-pages -d dist"
   },
-  
   "license": "MIT",
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
@@ -48,8 +47,7 @@
     "typescript": "^5.1.6",
     "vite": "^4.4.8",
     "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-eslint": "^1.8.1",
-    "vite-ssg": "^0.23.1"
+    "vite-plugin-eslint": "^1.8.1"
   },
   "lint-staged": {
     "src/**/*.{js,vue,ts}": "eslint --cache --fix",

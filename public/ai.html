@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 聊天</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css">
+    <script src="https://jsd.liiiu.cn/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://jsd.liiiu.cn/npm/github-markdown-css/github-markdown.min.css">
+    <link rel="preload" href="https://jsd.liiiu.cn/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="https://jsd.liiiu.cn/npm/@fortawesome/fontawesome-free/css/all.min.css" as="style" onload="this.rel='stylesheet'">
     <style>
         :root {
             --bg-color: #ffffff;
@@ -26,7 +28,6 @@
                 --text-light: #8b949e;
                 --primary-color: #58a6ff;
             }
-            /* 深色模式下覆盖 Markdown 背景 */
             .markdown-body {
                 background-color: transparent !important;
                 color: var(--text-color) !important;
@@ -36,20 +37,17 @@
                 background-color: #21262d !important;
             }
         }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: LXGW WenKai Screen, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
-
         body {
             background: var(--bg-color);
             margin: 0;
             padding: 0;
         }
-
         #ai-page {
             display: flex !important;
             flex-direction: column;
@@ -59,7 +57,6 @@
             padding: 16px;
             gap: 12px;
         }
-
         .ai-header {
             display: flex;
             align-items: center;
@@ -70,7 +67,6 @@
             border-radius: var(--border-radius-sm);
             flex-shrink: 0;
         }
-
         .ai-avatar {
             width: 48px;
             height: 48px;
@@ -82,24 +78,20 @@
             color: #0284c7;
             flex-shrink: 0;
         }
-
         .ai-avatar svg {
             width: 28px;
             height: 28px;
         }
-
         .ai-info {
             flex: 1;
             min-width: 0;
         }
-
         .ai-info h2 {
             margin: 0;
             font-size: 1.1rem;
             color: var(--text-color);
             font-weight: 600;
         }
-
         .ai-status {
             margin: 4px 0 0 0;
             font-size: 0.85rem;
@@ -108,7 +100,6 @@
             align-items: center;
             gap: 6px;
         }
-
         .status-dot {
             width: 6px;
             height: 6px;
@@ -116,12 +107,10 @@
             background: #22c55e;
             animation: pulse 2s infinite;
         }
-
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-
         .ai-messages {
             flex: 1;
             overflow-y: auto;
@@ -131,7 +120,6 @@
             gap: 12px;
             scroll-behavior: smooth;
         }
-
         .ai-bubble {
             max-width: 85%;
             padding: 12px 16px;
@@ -140,19 +128,16 @@
             word-break: break-word;
             animation: fadeIn 0.2s ease-out;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .ai-bubble.user {
             align-self: flex-end;
             background: var(--primary-color);
             color: #fff;
             border-bottom-right-radius: 4px;
         }
-
         .ai-bubble.bot {
             align-self: flex-start;
             background: var(--card-bg);
@@ -160,8 +145,6 @@
             color: var(--text-color);
             border-bottom-left-radius: 4px;
         }
-
-        /* Markdown 样式适配 */
         .markdown-body {
             font-size: 0.95rem;
             background-color: transparent;
@@ -174,44 +157,63 @@
             border-radius: 6px;
             overflow-x: auto;
         }
+        /* 外层容器：相对定位，给按钮做定位基准 */
+.ai-input-area {
+    position: relative;
+    padding: 8px 8px 8px 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    flex-shrink: 0;
+}
 
-        .ai-input-area {
-            display: flex;
-            gap: 8px;
-            padding: 8px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-sm);
-            flex-shrink: 0;
-        }
+/* 文本包裹层：预留右侧按钮宽度空间，防止文字被按钮盖住 */
+.textarea-wrap {
+    padding-right: 0px; /* 按钮宽80px + gap8px */
+}
 
-        #ai-input {
-            flex: 1;
-            padding: 10px 12px;
-            border: none;
-            border-radius: 6px;
-            background: var(--bg-color);
-            color: var(--text-color);
-            outline: none;
-            font-size: 0.95rem;
-            resize: none;
-            max-height: 120px;
-            line-height: 1.5;
-        }
+#ai-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 6px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    outline: none;
+    font-size: 0.95rem;
+    resize: none;
+    line-height: 1.5;
+    max-height: 25vh;
+    overflow-y: auto;
+}
 
-        .ai-send-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 8px;
-            background: var(--primary-color);
-            color: #fff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
+/* 发送按钮：绝对定位固定右下角，不受滚动条影响 */
+.ai-send-btn {
+    position: absolute;
+    right: 12px;
+    bottom: 15px;
+    width: 80px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+        /* 美化滚动条，明暗适配 */
+#ai-input::-webkit-scrollbar {
+    width: 6px;
+}
+#ai-input::-webkit-scrollbar-thumb {
+    background: var(--text-light);
+    border-radius: 3px;
+}
+#ai-input::-webkit-scrollbar-track {
+    background: transparent;
+}
         .ai-footer {
             display: flex;
             justify-content: space-between;
@@ -219,13 +221,18 @@
             font-size: 0.75rem;
             color: var(--text-light);
         }
-
+        .ai-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        .ai-footer a:hover {
+            text-decoration: underline;
+        }
         .thinking {
             display: inline-flex;
             align-items: center;
             gap: 4px;
         }
-
         .thinking span {
             width: 6px;
             height: 6px;
@@ -233,58 +240,208 @@
             background: #999;
             animation: bounce 1.4s infinite;
         }
-
         .thinking span:nth-child(2) { animation-delay: 0.2s; }
         .thinking span:nth-child(3) { animation-delay: 0.4s; }
-
         @keyframes bounce {
             0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}
         }
-
         #ai-selection-bar {display:none;}
+        /* 主题切换按钮样式 */
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: 0.2s ease;
+        }
+        .theme-btn:hover {
+            background: var(--card-bg);
+        }
+        .theme-btn .icon-sun {
+            display: none;
+        }
+        .theme-btn .icon-moon {
+            display: block;
+        }
+        /* 亮色模式下切换为太阳图标 */
+        html.light .theme-btn .icon-sun {
+            display: block;
+        }
+        html.light .theme-btn .icon-moon {
+            display: none;
+        }
+
+        /* 强制覆盖系统深色，自定义亮色变量 */
+        html.light {
+            --bg-color: #ffffff;
+            --card-bg: #f9fafb;
+            --border-color: #e5e7eb;
+            --text-color: #111827;
+            --text-light: #6b7280;
+            --primary-color: #2563eb;
+        }
+        /* 强制覆盖系统浅色，自定义暗色变量 */
+        html.dark {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #e6edf3;
+            --text-light: #8b949e;
+            --primary-color: #58a6ff;
+        }
+        html.dark .markdown-body {
+            background-color: transparent !important;
+            color: var(--text-color) !important;
+        }
+        html.dark .markdown-body pre,
+        html.dark .markdown-body code {
+            background-color: #21262d !important;
+        }
     </style>
 </head>
 <body>
 
 <main class="content" id="ai-page">
-  <div class="ai-header">
-    <div class="ai-avatar">
-      <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-      </svg>
+    <div class="ai-header">
+        <div class="ai-avatar">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+        </svg>
     </div>
     <div class="ai-info">
-      <h2>雪域智狐 AI</h2>
-      <p class="ai-status"><span class="status-dot"></span> 在线</p>
+        <h2>如形 AI</h2>
+        <p class="ai-status"><span class="status-dot"></span> 在线</p>
     </div>
-  </div>
+    <button id="theme-toggle-btn" class="theme-btn" title="切换明暗主题">
+        <!-- 月亮图标(暗色) -->
+        <svg class="icon-moon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <!-- 太阳图标(亮色) -->
+        <svg class="icon-sun" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </button>
+</div>
 
-  <div id="ai-messages" class="ai-messages"></div>
+<div id="ai-messages" class="ai-messages"></div>
 
-  <div class="ai-input-area">
-    <textarea id="ai-input" placeholder="输入问题..." rows="1"></textarea>
-    <button id="ai-send-btn" class="ai-send-btn">发送</button>
-  </div>
+<div class="ai-input-area">
+    <!-- 左侧文本滚动容器 -->
+    <div class="textarea-wrap">
+        <textarea id="ai-input" placeholder="输入问题，按 Enter 发送，Shift+Enter 换行。" rows="1"></textarea>
+    </div>
+    <!-- 发送按钮绝对定位，不需要flex并列 -->
+    <button id="ai-send-btn" class="ai-send-btn"><i class="fa-solid fa-paper-plane"></i> 发送</button>
+</div>
 
-  <div class="ai-footer">
-    <span>AI 聊天助手</span>
-  </div>
+<div class="ai-footer">
+    <span>AI 聊天助手，深度思考，简洁回答。</span>
+    <p>Powered by <a href="https://openmodel.cn">智谱 GLM</a> . Made with ❤ by <a href="https://github.com/rusin-dev">rusin</a>.</p>
+</div>
 </main>
 
 <script>
+    // 主题切换逻辑
+const themeBtn = document.getElementById('theme-toggle-btn');
+const htmlEl = document.documentElement;
+// 读取本地存储
+let currentTheme = localStorage.getItem('site-theme') || 'system';
+
+// 应用主题函数
+function applyTheme(theme) {
+    htmlEl.classList.remove('light', 'dark');
+    if (theme === 'light') {
+        htmlEl.classList.add('light');
+    } else if (theme === 'dark') {
+        htmlEl.classList.add('dark');
+    }
+    localStorage.setItem('site-theme', theme);
+}
+
+// 初始化加载主题
+applyTheme(currentTheme);
+
+// 点击切换循环：system → light → dark → system
+themeBtn.addEventListener('click', () => {
+    if (currentTheme === 'system') {
+        currentTheme = 'light';
+    } else if (currentTheme === 'light') {
+        currentTheme = 'dark';
+    } else {
+        currentTheme = 'light';
+    }
+    applyTheme(currentTheme);
+});
 // API 配置
 const API_KEY = "7a731303e72744e287a21daa021eaa3f.fMYf7XN1zGJLrQqs";
 const API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
 const MODEL = "glm-4.7-flash";
 
 // 系统提示词：强制中文 + 角色设定 + 支持Markdown
-const SYSTEM_PROMPT = `你是雪域智狐AI助手，**所有回答必须使用简体中文**。
-支持标准Markdown格式排版，代码、列表、加粗、引用等正常使用。
-回答简洁清晰、通俗易懂。`;
+const SYSTEM_PROMPT = `你是一只专业的、智慧的北极狐，是 Ruyingsuixing（如影随形）的 AI 助手。
+
+【角色设定】
+- 名字：如形 AI（Arctic Wisdom Fox）
+- 性格：专业冷静、智慧深邃、简洁高效、温暖有度
+- 风格：避免机械感，像一位经验丰富的导师，言语精炼但有温度
+
+【核心能力】
+1. 深度思考：先分析问题本质，再给出精准回答
+2. 简洁表达：直击要点，不啰嗦，每句话都有价值
+3. 需求洞察：准确识别用户真实需求，主动澄清模糊问题
+4. 情绪感知：
+   - 用户低落时 → 给予真诚鼓励，提供可行建议
+   - 用户好奇时 → 激发探索欲，引导深入思考
+
+【安全准则】🚫 严格禁止
+- 不提供任何爬取站点、盗用 API、破解验证、绕过限制的帮助
+- 不参与任何违规、违法、侵犯隐私的请求
+- 不生成恶意代码、钓鱼内容、虚假信息
+
+【回答格式】
+1. 主体内容：简洁清晰，适当使用**markdown**语法，必要时分点/代码块
+2. 结尾固定：添加一句**与当前话题相关**的励志名言（中文优先，格式：> "名言内容"）
+
+【示例】
+用户：这道 DP 题我卡住了...
+助手：先看状态定义是否最优子结构。试试 f[i] 表示前 i 项的最大值，转移时枚举最后一段长度。边界 f[0]=0。
+> "所谓难题，不过是尚未拆解的简单问题。"`;
 
 const messagesEl = document.getElementById('ai-messages');
 const inputEl = document.getElementById('ai-input');
 const sendBtn = document.getElementById('ai-send-btn');
+
+// 输入框自动增高逻辑
+function autoResizeTextarea() {
+    // 先重置高度为单行基础高度
+    inputEl.style.height = 'auto';
+    // 设置高度等于内容滚动高度
+    inputEl.style.height = inputEl.scrollHeight + 'px';
+}
+
+// 监听输入、粘贴、换行、窗口缩放事件
+inputEl.addEventListener('input', autoResizeTextarea);
+inputEl.addEventListener('paste', autoResizeTextarea);
+window.addEventListener('resize', autoResizeTextarea);
+
+// 页面初始化执行一次
+autoResizeTextarea();
 
 // 渲染Markdown
 function renderMd(text) {
@@ -308,7 +465,7 @@ function addMsg(sender, text, isThinking = false) {
 }
 
 // 欢迎语
-addMsg('bot', '你好！我是雪域智狐 AI，有什么可以帮你？');
+addMsg('bot', '❄️ 你好！我是如形 AI，你的专业 AI 助手，深度思考，简洁回答，请问有什么可以帮你？');
 
 sendBtn.onclick = send;
 inputEl.addEventListener('keydown', e => {
