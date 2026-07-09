@@ -19,5 +19,8 @@ export default defineConfig({
     // 可选：静态打包优化
     outDir: "dist",
     emptyOutDir: true
+  },
+  optimizeDeps: {
+    include: ["@vueuse/head"]
   }
 });
